@@ -146,3 +146,13 @@ AUTH_USER_MODEL = 'hosts.UserProfile'
 # added by luo1fly to define login url
 # https://docs.djangoproject.com/en/1.10/ref/settings/#std:setting-LOGIN_URL
 LOGIN_URL = '/login/'
+
+# added by luo1fly to define ssh key location
+RSA_PRIVATE_KEY_FILE = '/root/.ssh/id_rsa'
+
+# added by luo1fly to define multi_task scripts and types
+MultiTaskScript = "%s/hosts/backend/multi_task.py" % BASE_DIR
+MultiTaskRunType = 'by_paramiko'
+
+# added by luo1fly to define file upload directory
+FileUploadDir = "%s/uploads" % BASE_DIR

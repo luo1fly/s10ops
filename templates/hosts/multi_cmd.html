@@ -1,115 +1,22 @@
 {% extends 'hosts/dashboard.html' %}
 
 {% block content-panel %}
-    <div class="col-md-3">
-        <div class="panel panel-default panel-left">
+{% include 'hosts/host_list_component.html' %}
+    <div class="col-md-9">
+        <div class="panel panel-default panel-right">
             <div class="panel-body">
-                <ul id="group-list" class="list-group">
-                    <li class="list-group-item border-less">
-                        <a href="#">未分组</a>
-                        <span class="badge">{{ request.user.bind_hosts.select_related.count }}</span>
-                    </li>
-                    {% for group in request.user.host_groups.select_related %}
-                    <li class="list-group-item border-less">
-                        <input onclick="CheckAllToggle(this)" data="host-group" type="checkbox" value="{{ group.id }}">
-                        <a class="a-pointer" data="group">{{ group.name }}</a>{# next() #}
-                        <span class="badge">{{ group.bindhosttouser_set.select_related.count }}</span>{# next() #}
-                        <ul class="list-group hide">{# next() #}
-                            {% for h in group.bindhosttouser_set.select_related %}
-                            <li class="list-group-item list-tree">{# children() #}
-                                <span>-- </span>
-                                <input data="bind-host" type="checkbox" value="{{ h.id }}">{# children('input') #}
-                                {{ h.host.name }}
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </li>
-                    {% endfor %}
-                </ul>
+                {% csrf_token %}
+                {% include 'hosts/task_exec_component.html' %}
+                <div id="err-msg"></div>
+                <br/>
+                <div id="result-box"></div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-9">
-        <div class="panel panel-default panel-right">
-            <div class="panel-body">
-                <textarea name="cmd" class="form-control" rows="3" placeholder="输入要执行的命令..."></textarea>
-                <br/>
-                {% csrf_token %}
-                <button type="button" class="btn btn-success pull-right" onclick="SubmitTask('multi_cmd')">执行命令</button>
-                <div id="err-msg"></div>
-            </div>
-        </div>
-    </div>
 {% endblock %}
 
 {% block bottom-js %}
 {{ block.super }}
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("#group-list a[data='group']").click(function () {
-            $(this).nextAll('ul').toggleClass('hide');
-        });
-    });
-
-    function CheckAllToggle(ele){
-        if(ele.checked){//把它下面所有的主机都 全选
-            $(ele).next().next().next().children().children("input").prop("checked",true);
-        }else{
-            $(ele).next().next().next().children().children("input").prop("checked",false);
-        };
-    };
-
-    function SubmitTask(task_type) {
-        if (task_type=='multi_cmd'){
-            FormVerification('multi_cmd');
-        };
-    };
-
-    function FormVerification(task_type) {
-        var err_list = [];
-        var data_dic = {};
-
-        if (task_type=='multi_cmd'){
-            data_dic['task_type'] = task_type;
-            data_dic['selected_hosts'] = JSON.stringify(SelectedHosts());
-            data_dic['cmd'] = $.trim($("textarea[name='cmd']").val());
-            if (data_dic['selected_hosts'].length == 0){
-                err_list.push(['验证失败', '未选中任何主机']);
-            };
-            if (data_dic['cmd'].length == 0){
-                err_list.push(['验证失败', '未输入要执行的命令']);
-            };
-        };
-
-        if (err_list.length > 0){
-            $("#err-msg").html();
-            $.each(err_list, function (index, item) {
-                var err_msg = "<p style='color:red;'>"+index +". "+item[1]+"</p>";
-                $("#err-msgs").append(err_msg);
-            });
-        }else {
-            data_dic['csrfmiddlewaretoken'] = $("input[name='csrfmiddlewaretoken']").attr('value')
-            console.log(data_dic)
-            $.post("{% url 'submit_task' %}", data_dic, function(callback){
-                console.log(callback);
-            });
-        };
-
-
-
-    };
-
-    function SelectedHosts() {
-        var selected_hosts = []
-        var all_hosts = $("input[data='bind-host']")
-
-        $.each(all_hosts, function (index, ele) {
-            if (ele.checked){
-                selected_hosts.push($(ele).val());
-            };
-        });
-        return selected_hosts
-    }
-</script>
+{% include 'hosts/multi_task_js.html' %}
 {% endblock %}

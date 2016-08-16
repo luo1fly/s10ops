@@ -1,9 +1,10 @@
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from hosts import models, task
-from django.utils.datastructures import MultiValueDictKeyError
+from django.views.decorators.csrf import csrf_exempt
+from hosts import models, task, utils
 import json
+from django.utils.datastructures import MultiValueDictKeyError
 # Create your views here.
 
 
@@ -38,15 +39,35 @@ def multi_cmd(request):
 
 @login_required
 def submit_task(request):
-    # print(json.loads(request.POST['selected_hosts']))
     try:
         task_type = request.POST['task_type']
     except MultiValueDictKeyError as e:
         return HttpResponse('chu cuo le, ni mei you chuan task_type')
     else:
         task_handler = task.Task(request)
-        task_handler.call(task_type)
-        return HttpResponse('haha')
+        task_id = task_handler.call(task_type)  # backend func() returns
+        return HttpResponse(json.dumps(task_id))
+
+
+@login_required
+def get_task_result(request):
+    task_handler = task.Task(request)
+    task_result = task_handler.get_task_result()
+    # print(task_result)
+    return HttpResponse(json.dumps(task_result, default=utils.datetime_to_strftime))
+
+
+@login_required
+def file_delivery(request):
+    return render(request, 'hosts/multi_file_delivery.html', locals())
+
+
+@csrf_exempt
+@login_required
+def file_upload(request):
+    file_obj = request.FILES['filename']
+    file_upload_path = utils.handle_upload_file(request, file_obj)
+    return HttpResponse(json.dumps(file_upload_path))
 
 
 @login_required
