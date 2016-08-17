@@ -8,7 +8,7 @@ from hosts import models
 import subprocess
 from s10ops import settings
 import os
-# import json
+import json
 # from django.utils.datastructures import MultiValueDictKeyError
 # import your modules above
 
@@ -73,7 +73,7 @@ class Task(object):
         task_obj = models.TaskLog(
             task_type=task_type,
             user_id=self.request.user.id,
-            cmd=cmd_dic,
+            cmd=json.dumps(cmd_dic),
         )
         task_obj.save()
         task_obj.hosts.add(*selected_hosts)

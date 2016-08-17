@@ -6,6 +6,7 @@
 import sys
 import re
 import os
+# import json
 from getopt import getopt, GetoptError
 # print(os.path.abspath(__file__))
 sys.path.append(
@@ -31,6 +32,7 @@ from paramiko_handler import paramiko_ssh, paramiko_sftp
 def by_paramiko(task_id):
     try:
         task_obj = models.TaskLog.objects.get(id=task_id)
+        # print('task_obj:', task_obj.cmd)
     except ObjectDoesNotExist as e:
         sys.exit(e.args[0])
     else:

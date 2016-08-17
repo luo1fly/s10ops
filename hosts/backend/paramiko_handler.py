@@ -8,7 +8,7 @@ import os
 from django.utils import timezone
 from s10ops import settings
 from hosts import models
-# import json
+import json
 # from multiprocessing import Pool
 # from multiprocessing import RLock
 # import custom modules above
@@ -81,7 +81,8 @@ def paramiko_sftp(bind_host_to_user_ins, task_obj, task_id):
                 pkey=key,
             )
         sftp = paramiko.SFTPClient.from_transport(ts)
-        task_dic = eval(task_obj.cmd)
+        # task_dic = eval(task_obj.cmd)
+        task_dic = json.loads(task_obj.cmd)
         # 此处用json.loads有问题，暂未查明
 
         if task_obj.task_type == 'file_send':
