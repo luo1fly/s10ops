@@ -6,7 +6,9 @@ from hosts.myauth import UserProfile
 
 class Host(models.Model):
     name = models.CharField(max_length=64)
-    ip_address = models.GenericIPAddressField(unique=1)
+    sn = models.CharField(max_length=128, blank=1, null=1)
+    # 此处sn不加非空约束是因为hostbiao可以包含虚拟机，我们cmdb中的server也不能直接外键关联到host表，后续可以通过第三方脚本来实现数据导入
+    ip_address = models.GenericIPAddressField()
     port = models.IntegerField(default=22)
     idc = models.ForeignKey('IDC')
     system_type_choices = (
@@ -22,6 +24,8 @@ class Host(models.Model):
         return "%s(%s)" % (self.name, self.ip_address)
 
     class Meta:
+        unique_together = ('ip_address', 'port')
+        # 联合唯一约束，要考虑虚拟机的情况
         verbose_name = u'远程主机'
         verbose_name_plural = u"远程主机"
 
@@ -70,7 +74,7 @@ class HostGroup(models.Model):
 
 class BindHostToUser(models.Model):
     host = models.ForeignKey("Host")
-    host_user= models.ForeignKey("HostUser")
+    host_user = models.ForeignKey("HostUser")
     # host_user= models.ManyToManyField("HostUser")
     host_groups = models.ManyToManyField("HostGroup")
 

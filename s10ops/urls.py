@@ -17,6 +17,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from hosts import urls as hosts_urls
 from hosts import views
+from assets import rest_urls
+import rest_framework
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -26,4 +28,5 @@ urlpatterns = [
     url(r'^$', views.index, name='dashboard'),
     url(r'^asset/$', views.assets_index, name='assets'),
     url(r'^monitor/$', views.monitor_index, name='monitor'),
+    url(r'^api/', include(rest_urls)),
 ]

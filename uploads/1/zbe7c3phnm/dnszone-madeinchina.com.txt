@@ -1,0 +1,54 @@
+$ORIGIN madeinchina.com.
+$TTL 900
+@ IN SOA ns1.softlayer.com. root.madeinchina.com. (
+                       2016031612        ; Serial
+                       7200              ; Refresh
+                       600               ; Retry
+                       1728000           ; Expire
+                       43200)            ; Minimum
+
+@                      900      IN NS    ns1.softlayer.com.
+@                      900      IN NS    ns2.softlayer.com.
+
+@                      900      IN MX 10 mail.madeinchina.com.
+e                      86400    IN MX 10 mx.eemms.net.
+
+DZC                    900      IN TXT   9IpGMx9T
+e                      86400    IN TXT   v=spf1 include:emarsys.net include:emsmtp.com ~all
+key2._domainkey.e      86400    IN TXT   v=DKIM1;k=rsa;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCqFwlkVVM4irVCuSD/bs1ewUWLU/0c8qOdhw4/YXXZugQapNKUpcpmaFwZ3Dw380eIm8fFUfv96ObYEPeDBb32KcOjQfHV6cquwMfnIy7iZtC+3lloRJKKc/fHDgaP81l8fOEwpm7F4jXqa3Qh775JlsrptFfBoMAyQ0XDgUQI1QIDAQAB
+_dmarc.e               86400    IN TXT   v=DMARC1; p=reject; adkim=s; aspf=r; rf=afrf; pct=100
+_domainkey.e           86400    IN TXT   o=~; n=http://www.madeinchina.com/page-Privacy
+img.traceedm           900      IN CNAME img-madeinchina-com.emarsys.net
+l.traceedm             900      IN CNAME link-madeinchina-com.emarsys.net
+traceedm               86400    IN CNAME suite.emarsys.net.
+*                      86400    IN A     211.157.149.115
+@                      900      IN A     50.23.248.91
+cart                   900      IN A     50.23.248.91
+checkout               900      IN A     50.23.248.91
+cleanup                900      IN A     50.23.248.91
+club                   900      IN A     50.23.248.91
+cms                    86400    IN A     50.23.248.91
+cs                     900      IN A     50.23.248.91
+ftp1                   900      IN A     50.23.248.94
+go4                    86400    IN A     50.23.248.91
+img                    86400    IN A     50.23.248.92
+mail                   86400    IN A     58.177.149.162
+maint                  900      IN A     58.222.17.195
+my                     900      IN A     50.23.248.91
+order                  900      IN A     50.23.248.91
+passport               900      IN A     50.23.248.91
+pcms                   86400    IN A     50.23.248.91
+promotions             86400    IN A     50.23.248.91
+pss                    86400    IN A     116.6.101.200
+psssvc                 86400    IN A     116.6.101.200
+seller                 86400    IN A     116.6.101.198
+splunk                 900      IN A     50.23.248.91
+srcimg                 86400    IN A     50.23.248.94
+szips                  86400    IN A     116.6.101.200
+szzbx                  86400    IN A     116.6.101.200
+testiis                900      IN A     58.222.17.222
+testnginx              900      IN A     61.177.185.2
+testpaul               86400    IN A     50.23.248.91
+uszbx                  86400    IN A     50.23.248.91
+webtools               900      IN A     50.23.248.91
+www                    900      IN A     50.23.248.91

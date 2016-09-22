@@ -1,6 +1,7 @@
 from django.contrib import admin
 from hosts import models
 from hosts import auth_admin
+from django.contrib.auth.models import Group
 # Register your models above.
 
 
@@ -28,6 +29,7 @@ admin.site.register(models.BindHostToUser, BindHostToUserAdmin)
 admin.site.register(models.TaskLog)
 admin.site.register(models.TaskLogDetail)
 
+admin.site.unregister(Group)
 
 
 

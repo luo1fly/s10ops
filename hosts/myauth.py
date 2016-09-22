@@ -116,3 +116,4 @@ class UserProfile(AbstractBaseUser):
         return self.name
 
     objects = UserManager()
+
